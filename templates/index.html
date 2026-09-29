@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberGuard AI &bull; Intelligent Fraud Detection Platform</title>
+    
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-canvas: #f8fafc;
+            --surface-card: #ffffff;
+            --surface-subtle: #f1f5f9;
+            --surface-hover: #f8fafc;
+            
+            --border-subtle: #e2e8f0;
+            --border-medium: #cbd5e1;
+            
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --text-subtle: #94a3b8;
+            
+            --brand-primary: #2563eb;
+            --brand-primary-soft: #eff6ff;
+            --brand-primary-border: #bfdbfe;
+            
+            --status-success-bg: #f0fdf4;
+            --status-success-text: #166534;
+            --status-success-border: #bbf7d0;
+            
+            --status-warning-bg: #fffbeb;
+            --status-warning-text: #92400e;
+            --status-warning-border: #fde68a;
+            
+            --status-danger-bg: #fff1f2;
+            --status-danger-text: #9f1239;
+            --status-danger-border: #fecdd3;
+            
+            --status-info-bg: #f0f9ff;
+            --status-info-text: #075985;
+            --status-info-border: #bae6fd;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            background-color: var(--bg-canvas);
+            color: var(--text-body);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Clean Top Navigation */
+        .navbar-main {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.9rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-icon-box {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border-radius: var(--radius-sm);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.15rem;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .brand-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.02em;
+        }
+
+        .version-badge {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--brand-primary);
+            background-color: var(--brand-primary-soft);
+            border: 1px solid var(--brand-primary-border);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        /* Modern Segmented Navigation Tabs */
+        .tab-segmented-container {
+            background-color: #e2e8f0;
+            padding: 4px;
+            border-radius: var(--radius-md);
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .tab-segmented-container .nav-link {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.88rem;
+            padding: 0.5rem 1.1rem;
+            border-radius: 8px;
+            transition: all 0.15s ease-in-out;
+        }
+
+        .tab-segmented-container .nav-link:hover {
+            color: var(--text-heading);
+        }
+
+        .tab-segmented-container .nav-link.active {
+            background-color: #ffffff;
+            color: var(--text-heading);
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Unified Card Architecture */
+        .card-surface {
+            background-color: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-subtle);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card-header-clean {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-body-clean {
+            padding: 1.5rem;
+        }
+
+        /* Scenario Preset Cards */
+        .preset-card {
+            background-color: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.15rem;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .preset-card:hover {
+            border-color: var(--brand-primary);
+            box-shadow: var(--shadow-card);
+            transform: translateY(-1px);
+        }
+
+        .preset-card.active-preset {
+            border-color: var(--brand-primary);
+            background-color: var(--brand-primary-soft);
+            box-shadow: 0 0 0 1px var(--brand-primary);
+        }
+
+        /* Calm Status Badges */
+        .badge-fraud-soft {
+            background-color: var(--status-danger-bg);
+            color: var(--status-danger-text);
+            border: 1px solid var(--status-danger-border);
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .badge-legit-soft {
+            background-color: var(--status-success-bg);
+            color: var(--status-success-text);
+            border: 1px solid var(--status-success-border);
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .badge-neutral-soft {
+            background-color: var(--surface-subtle);
+            color: var(--text-muted);
+            border: 1px solid var(--border-subtle);
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        /* Calm Risk Assessment Hero */
+        .risk-assessment-box {
+            border-radius: var(--radius-md);
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+            background-color: #fafbfc;
+        }
+
+        .risk-box-safe {
+            background-color: var(--status-success-bg);
+            border-color: var(--status-success-border);
+        }
+
+        .risk-box-warning {
+            background-color: var(--status-warning-bg);
+            border-color: var(--status-warning-border);
+        }
+
+        .risk-box-critical {
+            background-color: var(--status-danger-bg);
+            border-color: var(--status-danger-border);
+        }
+
+        .risk-score-display {
+            font-size: 3.25rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .score-safe { color: #15803d; }
+        .score-warning { color: #b45309; }
+        .score-critical { color: #be123c; }
+
+        /* Multi-Model Grid Cards */
+        .model-card-clean {
+            background-color: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.95rem 1rem;
+            transition: border-color 0.15s ease;
+        }
+
+        .model-card-clean:hover {
+            border-color: var(--border-medium);
+        }
+
+        /* Form Inputs */
+        .form-label-subtle {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-control-clean {
+            background-color: #ffffff;
+            border: 1px solid var(--border-medium);
+            color: var(--text-heading);
+            border-radius: var(--radius-sm);
+            padding: 0.6rem 0.85rem;
+            font-size: 0.92rem;
+            transition: all 0.15s ease;
+        }
+
+        .form-control-clean:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            outline: none;
+        }
+
+        .input-group-text-clean {
+            background-color: var(--surface-subtle);
+            border: 1px solid var(--border-medium);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-radius: var(--radius-sm);
+        }
+
+        /* Clean Tables */
+        .table-light-clean {
+            color: var(--text-body);
+            --bs-table-bg: transparent;
+            --bs-table-border-color: var(--border-subtle);
+        }
+
+        .table-light-clean th {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.85rem 1.1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            background-color: #f8fafc;
+        }
+
+        .table-light-clean td {
+            padding: 0.95rem 1.1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.88rem;
+        }
+
+        /* Subtle Progress Bars */
+        .progress-subtle {
+            background-color: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 6px;
+        }
+
+        /* Live Indicator */
+        .status-dot-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            display: inline-block;
+        }
+
+        /* Custom Scrollbar for PCA */
+        .pca-scroll-panel::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .pca-scroll-panel::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .pca-scroll-panel::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .pca-scroll-panel::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Navigation Header -->
+    <header class="navbar-main">
+        <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+            
+            <!-- Brand & Product -->
+            <div class="d-flex align-items-center gap-3">
+                <div class="brand-icon-box">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="brand-title">CyberGuard AI</span>
+                        <span class="version-badge">v2.1</span>
+                    </div>
+                    <small class="text-muted" style="font-size: 0.78rem;">Financial Risk Assessment & Transaction Screening</small>
+                </div>
+            </div>
+
+            <!-- Header Center / Right Controls -->
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-md-flex align-items-center gap-2 bg-light border px-3 py-1 rounded-pill text-muted small">
+                    <span class="status-dot-pulse"></span>
+                    <span>4 Active ML Engines</span>
+                    <span class="text-secondary">&bull;</span>
+                    <span>284k Records</span>
+                </div>
+
+                <a href="https://github.com/me-koko/CC_Fraud_Detection" target="_blank" class="btn btn-outline-secondary btn-sm px-3 rounded-pill text-secondary border">
+                    <i class="bi bi-journal-text me-1"></i>Documentation
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container-fluid px-4 py-4">
+
+        <!-- Tab Controls (Modern Minimal Segmented) -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div class="tab-segmented-container" id="mainTabs" role="tablist">
+                <button class="nav-link active" id="tab-screener-btn" data-bs-toggle="pill" data-bs-target="#screener-view" type="button">
+                    <i class="bi bi-shield-shaded me-1"></i>Transaction Screener
+                </button>
+                <button class="nav-link" id="tab-monitor-btn" data-bs-toggle="pill" data-bs-target="#monitor-view" type="button">
+                    <i class="bi bi-activity me-1"></i>Live Stream Feed
+                </button>
+                <button class="nav-link" id="tab-benchmarks-btn" data-bs-toggle="pill" data-bs-target="#benchmarks-view" type="button">
+                    <i class="bi bi-bar-chart-line me-1"></i>Model Benchmarks
+                </button>
+                <button class="nav-link" id="tab-dataset-btn" data-bs-toggle="pill" data-bs-target="#dataset-view" type="button">
+                    <i class="bi bi-database me-1"></i>Dataset Architecture
+                </button>
+            </div>
+
+            <!-- Quick Dataset Sampler Dropdown -->
+            <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-white border bg-white dropdown-toggle text-secondary shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-shuffle text-primary me-1"></i>Draw Dataset Sample
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm border">
+                    <li><a class="dropdown-item py-2 small" href="#" onclick="sampleDataset('any')"><i class="bi bi-dice-5 me-2 text-muted"></i>Any Random Row</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item py-2 small text-danger" href="#" onclick="sampleDataset('fraud')"><i class="bi bi-exclamation-octagon me-2"></i>Confirmed Fraud Row (Class: 1)</a></li>
+                    <li><a class="dropdown-item py-2 small text-success" href="#" onclick="sampleDataset('legit')"><i class="bi bi-check-circle me-2"></i>Confirmed Legit Row (Class: 0)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab Views Container -->
+        <div class="tab-content" id="mainTabContent">
+
+            <!-- TAB 1: TRANSACTION SCREENER -->
+            <div class="tab-pane fade show active" id="screener-view" role="tabpanel">
+
+                <!-- Scenarios Section -->
+                <div class="card-surface p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="fw-bold mb-1 text-dark">Quick Test Scenarios</h6>
+                            <p class="text-muted small mb-0">Select an authentic transaction scenario to populate parameters and evaluate consensus risk.</p>
+                        </div>
+                    </div>
+
+                    <!-- Presets Grid -->
+                    <div class="row g-3" id="presetsContainer">
+                        <div class="text-center py-3 text-muted small"><span class="spinner-border spinner-border-sm me-2"></span>Loading scenarios...</div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    
+                    <!-- Left: Transaction Input Panel -->
+                    <div class="col-lg-6">
+                        <div class="card-surface h-100">
+                            <div class="card-header-clean">
+                                <span class="fw-semibold text-dark"><i class="bi bi-credit-card text-primary me-2"></i>Transaction Details</span>
+                                <span id="groundTruthBadge" class="badge badge-neutral-soft d-none">Ground Truth: Unspecified</span>
+                            </div>
+                            <div class="card-body-clean">
+                                <form id="transactionForm" onsubmit="handleAnalyzeSubmit(event)">
+
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label-subtle">Amount ($ USD)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text input-group-text-clean">$</span>
+                                                <input type="number" step="0.01" class="form-control form-control-clean fw-semibold" id="input_Amount" value="149.62" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label-subtle">Time Elapsed (Seconds)</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text input-group-text-clean"><i class="bi bi-clock"></i></span>
+                                                <input type="number" step="1" class="form-control form-control-clean" id="input_Time" value="406" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Collapsible PCA Latent Vectors -->
+                                    <div class="mb-4">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <label class="form-label-subtle mb-0">PCA Latent Features (V1 – V28)</label>
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <button type="button" class="btn btn-link btn-sm text-decoration-none text-muted p-0 small" onclick="resetPCA()">
+                                                    <i class="bi bi-arrow-counterclockwise me-1"></i>Zero All
+                                                </button>
+                                                <span class="text-secondary small">&bull;</span>
+                                                <button class="btn btn-link btn-sm text-decoration-none text-muted p-0 small" type="button" data-bs-toggle="collapse" data-bs-target="#pcaGridCollapse">
+                                                    Toggle Grid
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="collapse show" id="pcaGridCollapse">
+                                            <div class="p-3 bg-light rounded-3 border pca-scroll-panel" style="max-height: 230px; overflow-y: auto;">
+                                                <div class="row g-2" id="pcaInputsWrapper">
+                                                    <!-- Injected dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" id="btnAnalyze" class="btn btn-primary w-100 py-2 fw-medium rounded-2 shadow-sm">
+                                        <i class="bi bi-shield-check me-2"></i>Screen Transaction with 4 Models
+                                    </button>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Results & Multi-Model Consensus -->
+                    <div class="col-lg-6">
+                        <div class="card-surface h-100 d-flex flex-column justify-content-between p-4">
+
+                            <!-- Calm Risk Score Box -->
+                            <div id="riskGauge" class="risk-assessment-box risk-box-safe mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge badge-legit-soft" id="riskLevelBadge">LOW RISK</span>
+                                    <span class="small text-muted" id="consensusVoteTag">0 / 4 Models Flagged</span>
+                                </div>
+
+                                <div class="my-2">
+                                    <span class="risk-score-display mono score-safe" id="riskScoreVal">12</span>
+                                    <span class="text-muted fs-6">/ 100</span>
+                                </div>
+
+                                <h6 class="fw-bold mb-1 text-dark" id="riskActionTitle">TRANSACTION APPROVED</h6>
+                                <p class="text-muted small mb-0" id="riskDescriptionText">Normal pattern detected with standard latent distributions.</p>
+                            </div>
+
+                            <!-- 4 Model Cards -->
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="form-label-subtle mb-0">Multi-Model Consensus Breakdown</span>
+                                    <span class="small text-muted">Independent Predictions</span>
+                                </div>
+
+                                <div class="row g-2" id="modelCardsContainer">
+                                    <!-- Rendered dynamically via JS -->
+                                    <div class="col-12 text-center text-muted py-3 small">Loading model evaluations...</div>
+                                </div>
+                            </div>
+
+                            <!-- Explainable AI (Root Cause Factors) -->
+                            <div class="bg-light p-3 rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="form-label-subtle mb-0">Contributing Anomaly Factors</span>
+                                    <span class="small text-muted" style="font-size:0.75rem;">Z-Score Distance (&sigma;)</span>
+                                </div>
+                                <div id="anomalyBadgesContainer" class="d-flex flex-wrap gap-2">
+                                    <span class="badge badge-neutral-soft">Awaiting screening...</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TAB 2: LIVE GATEWAY MONITOR -->
+            <div class="tab-pane fade" id="monitor-view" role="tabpanel">
+                <div class="card-surface p-4">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                        <div>
+                            <h5 class="fw-bold mb-1 text-dark">Live Payment Gateway Stream</h5>
+                            <p class="text-muted small mb-0">Simulates continuous authorization traffic evaluated in real-time by the active ML pipeline.</p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="form-check form-switch small">
+                                <input class="form-check-input" type="checkbox" id="streamToggle" checked onchange="toggleStream()">
+                                <label class="form-check-label text-muted" for="streamToggle">Stream Live</label>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm rounded-2" onclick="clearStreamTable()">Clear Feed</button>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Stat Strip -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="bg-light p-3 rounded-3 border">
+                                <small class="form-label-subtle d-block">Transactions Screened</small>
+                                <h4 class="fw-bold mb-0 text-dark" id="streamTotalCount">0</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="bg-light p-3 rounded-3 border">
+                                <small class="form-label-subtle d-block">Frauds Intercepted</small>
+                                <h4 class="fw-bold mb-0 text-danger" id="streamFraudCount">0</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="bg-light p-3 rounded-3 border">
+                                <small class="form-label-subtle d-block">Legit Approved</small>
+                                <h4 class="fw-bold mb-0 text-success" id="streamLegitCount">0</h4>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="bg-light p-3 rounded-3 border">
+                                <small class="form-label-subtle d-block">Protected Volume ($)</small>
+                                <h4 class="fw-bold mb-0 text-dark" id="streamSavedAmount">$0.00</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stream Table -->
+                    <div class="table-responsive border rounded-3">
+                        <table class="table table-light-clean mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Card Suffix</th>
+                                    <th>Time</th>
+                                    <th>Amount</th>
+                                    <th>Risk Probability</th>
+                                    <th>System Action</th>
+                                    <th>Ground Truth</th>
+                                </tr>
+                            </thead>
+                            <tbody id="streamTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 3: MODEL BENCHMARKS -->
+            <div class="tab-pane fade" id="benchmarks-view" role="tabpanel">
+                <div class="row g-4">
+                    
+                    <div class="col-lg-8">
+                        <div class="card-surface p-4 h-100">
+                            <h5 class="fw-bold mb-1 text-dark">Model Performance Comparison</h5>
+                            <p class="text-muted small mb-4">Holdout validation metrics across Accuracy, Precision, Recall, and F1-Score.</p>
+                            <div style="height: 320px;">
+                                <canvas id="modelComparisonChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card-surface p-4 h-100">
+                            <h5 class="fw-bold mb-3 text-dark">Executive Evaluation</h5>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item bg-transparent px-0 py-3 border-bottom">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-semibold text-dark">Top Overall Accuracy</span>
+                                        <span class="badge badge-legit-soft">Logistic Regression (94.9%)</span>
+                                    </div>
+                                    <small class="text-muted">Strong linear separability across PCA components post-scaling.</small>
+                                </div>
+                                <div class="list-group-item bg-transparent px-0 py-3 border-bottom">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-semibold text-dark">Lowest False Positives</span>
+                                        <span class="badge badge-legit-soft">Logistic Regression (97.8% Prec)</span>
+                                    </div>
+                                    <small class="text-muted">Minimizes false declines for trusted cardholders.</small>
+                                </div>
+                                <div class="list-group-item bg-transparent px-0 py-3 border-bottom">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-semibold text-dark">Best Non-Linear ROC</span>
+                                        <span class="badge badge-neutral-soft">SVM (98.3% ROC-AUC)</span>
+                                    </div>
+                                    <small class="text-muted">Robust margin separation via Radial Basis Function (RBF).</small>
+                                </div>
+                                <div class="list-group-item bg-transparent px-0 py-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-semibold text-dark">Fastest Latency</span>
+                                        <span class="badge badge-neutral-soft">Decision Tree (&lt;1 ms)</span>
+                                    </div>
+                                    <small class="text-muted">Instant O(depth) binary tree conditional evaluations.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Matrix Table -->
+                    <div class="col-12">
+                        <div class="card-surface p-4">
+                            <h6 class="fw-bold mb-3 text-dark">Validation Metrics Matrix</h6>
+                            <div class="table-responsive border rounded-3">
+                                <table class="table table-light-clean mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Model Architecture</th>
+                                            <th>Accuracy</th>
+                                            <th>Precision</th>
+                                            <th>Recall</th>
+                                            <th>F1-Score</th>
+                                            <th>ROC-AUC</th>
+                                            <th>Inference Latency</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="metricsTableBody">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 4: DATASET ARCHITECTURE -->
+            <div class="tab-pane fade" id="dataset-view" role="tabpanel">
+                <div class="row g-4">
+                    
+                    <div class="col-md-4">
+                        <div class="card-surface p-4 h-100">
+                            <h5 class="fw-bold mb-1 text-dark">Class Imbalance Ratio</h5>
+                            <p class="text-muted small mb-4">Visualizing the 99.83% vs 0.17% rarity of fraud in real transaction logs.</p>
+                            <div style="height: 250px;">
+                                <canvas id="imbalancePieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="card-surface p-4 h-100">
+                            <h5 class="fw-bold mb-3 text-dark">Data Governance & Privacy</h5>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="bg-light p-3 rounded-3 border h-100">
+                                        <h6 class="fw-semibold text-dark mb-1">Principal Component Analysis</h6>
+                                        <p class="text-muted small mb-0">Features <code>V1</code> through <code>V28</code> represent PCA orthogonal transformations provided by the original researchers to safeguard cardholder identity and satisfy banking privacy frameworks.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="bg-light p-3 rounded-3 border h-100">
+                                        <h6 class="fw-semibold text-dark mb-1">Standard Scaled Variables</h6>
+                                        <p class="text-muted small mb-0"><code>Time</code> (seconds offset) and <code>Amount</code> ($ value) were preserved in raw numerical scale, transformed dynamically via standard normal scaling during preprocessing.</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="bg-light p-3 rounded-3 border">
+                                        <h6 class="fw-semibold text-dark mb-1">Undersampling Methodology</h6>
+                                        <p class="text-muted small mb-0">Because only 492 out of 284,807 transactions are fraudulent, a naive classifier predicting all legit would score 99.83% accuracy while detecting 0 fraud. Random undersampling of legitimate transactions was applied to achieve balanced training and maximize sensitivity.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // State
+        let presetsData = [];
+        let streamInterval = null;
+        let streamRunning = true;
+        let streamStats = { total: 0, fraud: 0, legit: 0, savedAmount: 0 };
+        let comparisonChartInstance = null;
+        let pieChartInstance = null;
+
+        // Populate PCA input grid cleanly
+        function initPcaInputs() {
+            const container = document.getElementById('pcaInputsWrapper');
+            let html = '';
+            for (let i = 1; i <= 28; i++) {
+                html += `
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white border-subtle text-secondary mono" style="font-size:0.75rem; width:45px;">V${i}</span>
+                            <input type="number" step="any" class="form-control form-control-clean mono py-1" style="font-size:0.8rem;" id="input_V${i}" value="0.0">
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        // Reset PCA inputs
+        function resetPCA() {
+            for (let i = 1; i <= 28; i++) {
+                const el = document.getElementById('input_V' + i);
+                if (el) el.value = "0.0";
+            }
+        }
+
+        // Fetch Presets
+        async function loadPresets() {
+            try {
+                const res = await fetch('/api/presets');
+                presetsData = await res.json();
+                const container = document.getElementById('presetsContainer');
+                
+                let html = '';
+                presetsData.forEach((p, idx) => {
+                    const isFraud = p.category === 'fraud';
+                    const badgeClass = isFraud ? 'badge-fraud-soft' : 'badge-legit-soft';
+                    html += `
+                        <div class="col-md-4 col-sm-6">
+                            <div class="preset-card" onclick="selectPreset(${idx})" id="presetPill_${idx}">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge ${badgeClass}">${p.badge}</span>
+                                        <span class="mono fw-semibold text-dark">$${p.amount.toFixed(2)}</span>
+                                    </div>
+                                    <h6 class="fw-semibold text-dark mb-1" style="font-size: 0.88rem;">${p.title}</h6>
+                                    <p class="text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">${p.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+                if (presetsData.length > 0) {
+                    selectPreset(0);
+                }
+            } catch (err) {
+                console.error("Failed to load presets:", err);
+            }
+        }
+
+        function selectPreset(idx) {
+            document.querySelectorAll('.preset-card').forEach(el => el.classList.remove('active-preset'));
+            const pill = document.getElementById('presetPill_' + idx);
+            if (pill) pill.classList.add('active-preset');
+
+            const p = presetsData[idx];
+            if (!p) return;
+
+            document.getElementById('input_Amount').value = p.amount;
+            document.getElementById('input_Time').value = p.time;
+
+            if (p.features) {
+                for (let i = 1; i <= 28; i++) {
+                    const el = document.getElementById('input_V' + i);
+                    if (el && p.features['V' + i] !== undefined) {
+                        el.value = p.features['V' + i];
+                    }
+                }
+            }
+
+            const gtBadge = document.getElementById('groundTruthBadge');
+            gtBadge.classList.remove('d-none');
+            if (p.ground_truth === 1) {
+                gtBadge.className = 'badge badge-fraud-soft';
+                gtBadge.textContent = 'Ground Truth: FRAUD (1)';
+            } else {
+                gtBadge.className = 'badge badge-legit-soft';
+                gtBadge.textContent = 'Ground Truth: LEGIT (0)';
+            }
+
+            analyzeTransaction();
+        }
+
+        // Draw random real dataset sample
+        async function sampleDataset(type) {
+            try {
+                const res = await fetch('/api/random_transaction?type=' + type);
+                const data = await res.json();
+                if (data.status === 'ok') {
+                    document.querySelectorAll('.preset-card').forEach(el => el.classList.remove('active-preset'));
+
+                    document.getElementById('input_Amount').value = data.features.Amount;
+                    document.getElementById('input_Time').value = data.features.Time;
+
+                    for (let i = 1; i <= 28; i++) {
+                        const el = document.getElementById('input_V' + i);
+                        if (el) el.value = data.features['V' + i];
+                    }
+
+                    const gtBadge = document.getElementById('groundTruthBadge');
+                    gtBadge.classList.remove('d-none');
+                    if (data.ground_truth === 1) {
+                        gtBadge.className = 'badge badge-fraud-soft';
+                        gtBadge.textContent = 'Dataset Ground Truth: FRAUD (1)';
+                    } else {
+                        gtBadge.className = 'badge badge-legit-soft';
+                        gtBadge.textContent = 'Dataset Ground Truth: LEGIT (0)';
+                    }
+
+                    analyzeTransaction();
+                }
+            } catch (err) {
+                console.error("Sampling error:", err);
+            }
+        }
+
+        function handleAnalyzeSubmit(e) {
+            e.preventDefault();
+            analyzeTransaction();
+        }
+
+        // Screen transaction with 4 models
+        async function analyzeTransaction() {
+            const btn = document.getElementById('btnAnalyze');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Evaluating models...';
+
+            const features = {
+                'Time': parseFloat(document.getElementById('input_Time').value) || 0,
+                'Amount': parseFloat(document.getElementById('input_Amount').value) || 0
+            };
+            for (let i = 1; i <= 28; i++) {
+                features['V' + i] = parseFloat(document.getElementById('input_V' + i).value) || 0;
+            }
+
+            try {
+                const res = await fetch('/api/predict_all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ features: features })
+                });
+
+                const data = await res.json();
+                renderAnalysisResults(data);
+            } catch (err) {
+                console.error("Analysis error:", err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-shield-check me-2"></i>Screen Transaction with 4 Models';
+            }
+        }
+
+        function renderAnalysisResults(data) {
+            const gauge = document.getElementById('riskGauge');
+            const scoreEl = document.getElementById('riskScoreVal');
+            const levelBadge = document.getElementById('riskLevelBadge');
+            const voteTag = document.getElementById('consensusVoteTag');
+            const actionTitle = document.getElementById('riskActionTitle');
+            const descText = document.getElementById('riskDescriptionText');
+
+            scoreEl.textContent = data.risk_score;
+            voteTag.textContent = `${data.fraud_votes} of ${data.total_models} Models Flagged`;
+            actionTitle.textContent = data.status_message.split(':')[0].toUpperCase();
+            descText.textContent = data.status_message;
+
+            gauge.className = 'risk-assessment-box mb-4';
+            scoreEl.className = 'risk-score-display mono';
+
+            if (data.risk_badge === 'danger') {
+                gauge.classList.add('risk-box-critical');
+                scoreEl.classList.add('score-critical');
+                levelBadge.className = 'badge badge-fraud-soft';
+                levelBadge.textContent = 'CRITICAL THREAT';
+            } else if (data.risk_badge === 'warning') {
+                gauge.classList.add('risk-box-warning');
+                scoreEl.classList.add('score-warning');
+                levelBadge.className = 'badge bg-warning bg-opacity-25 text-warning-emphasis border border-warning-subtle';
+                levelBadge.textContent = 'HIGH RISK';
+            } else if (data.risk_badge === 'info') {
+                gauge.classList.add('risk-box-warning');
+                scoreEl.classList.add('score-warning');
+                levelBadge.className = 'badge badge-neutral-soft';
+                levelBadge.textContent = 'ELEVATED RISK';
+            } else {
+                gauge.classList.add('risk-box-safe');
+                scoreEl.classList.add('score-safe');
+                levelBadge.className = 'badge badge-legit-soft';
+                levelBadge.textContent = 'LOW RISK';
+            }
+
+            // Render Model Cards
+            const modelsContainer = document.getElementById('modelCardsContainer');
+            let mHtml = '';
+            for (const name in data.models) {
+                const m = data.models[name];
+                const isFraud = m.prediction === 1;
+                const badge = isFraud ? 'badge-fraud-soft' : 'badge-legit-soft';
+                const probWidth = m.probability_pct !== null ? m.probability_pct : (isFraud ? 100 : 0);
+                const barColor = isFraud ? 'bg-danger' : 'bg-success';
+
+                mHtml += `
+                    <div class="col-md-6">
+                        <div class="model-card-clean">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-semibold text-dark small">${name}</span>
+                                <span class="badge ${badge}">${m.prediction_label}</span>
+                            </div>
+                            <div class="progress progress-subtle my-2">
+                                <div class="progress-bar ${barColor}" style="width: ${probWidth}%;"></div>
+                            </div>
+                            <div class="d-flex justify-content-between text-muted" style="font-size: 0.72rem;">
+                                <span>Confidence: <strong class="text-dark">${probWidth}%</strong></span>
+                                <span>Latency: ${m.latency_ms}ms</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            modelsContainer.innerHTML = mHtml;
+
+            // Render Anomaly Factors
+            const anomContainer = document.getElementById('anomalyBadgesContainer');
+            let anomHtml = '';
+            data.top_anomalies.forEach(a => {
+                const isSevere = a.deviation_magnitude > 2.5;
+                const badgeStyle = isSevere ? 'badge-fraud-soft' : 'badge-neutral-soft';
+                anomHtml += `
+                    <span class="badge ${badgeStyle} py-1 px-2 mono" title="Value: ${a.value}">
+                        <strong>${a.feature}</strong>: ${a.z_score > 0 ? '+' : ''}${a.z_score}&sigma;
+                    </span>
+                `;
+            });
+            anomContainer.innerHTML = anomHtml;
+        }
+
+        // Live Gateway Stream
+        function toggleStream() {
+            const toggle = document.getElementById('streamToggle');
+            streamRunning = toggle.checked;
+            if (streamRunning && !streamInterval) {
+                startStreaming();
+            } else if (!streamRunning && streamInterval) {
+                clearInterval(streamInterval);
+                streamInterval = null;
+            }
+        }
+
+        function startStreaming() {
+            if (streamInterval) clearInterval(streamInterval);
+            streamInterval = setInterval(fetchStreamTick, 2200);
+        }
+
+        async function fetchStreamTick() {
+            if (!streamRunning) return;
+            try {
+                const res = await fetch('/api/stream_tick');
+                const tx = await res.json();
+                appendStreamRow(tx);
+            } catch (err) {
+                console.error("Stream tick error:", err);
+            }
+        }
+
+        function appendStreamRow(tx) {
+            const tbody = document.getElementById('streamTableBody');
+            
+            streamStats.total++;
+            if (tx.is_fraud) {
+                streamStats.fraud++;
+                streamStats.savedAmount += tx.amount;
+            } else {
+                streamStats.legit++;
+            }
+
+            document.getElementById('streamTotalCount').textContent = streamStats.total;
+            document.getElementById('streamFraudCount').textContent = streamStats.fraud;
+            document.getElementById('streamLegitCount').textContent = streamStats.legit;
+            document.getElementById('streamSavedAmount').textContent = '$' + streamStats.savedAmount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+            const row = document.createElement('tr');
+            const statusBadge = tx.is_fraud ? '<span class="badge badge-fraud-soft">BLOCKED</span>' : '<span class="badge badge-legit-soft">APPROVED</span>';
+            const riskColor = tx.risk_pct > 60 ? 'text-danger fw-semibold' : 'text-success fw-semibold';
+            const gtLabel = tx.ground_truth === 1 ? '<span class="text-danger small fw-semibold">Fraud (1)</span>' : '<span class="text-success small fw-semibold">Legit (0)</span>';
+
+            row.innerHTML = `
+                <td class="mono fw-semibold text-dark">${tx.tx_id}</td>
+                <td class="mono text-muted">${tx.card}</td>
+                <td class="small text-muted">${new Date().toLocaleTimeString()}</td>
+                <td class="mono fw-semibold text-dark">$${tx.amount.toFixed(2)}</td>
+                <td class="mono ${riskColor}">${tx.risk_pct}%</td>
+                <td>${statusBadge}</td>
+                <td>${gtLabel}</td>
+            `;
+
+            tbody.prepend(row);
+            if (tbody.children.length > 20) {
+                tbody.removeChild(tbody.lastChild);
+            }
+        }
+
+        function clearStreamTable() {
+            document.getElementById('streamTableBody').innerHTML = '';
+        }
+
+        // Metrics & Charts
+        async function loadMetricsAndCharts() {
+            try {
+                const res = await fetch('/api/metrics');
+                const data = await res.json();
+                if (data.status !== 'ok') return;
+
+                // Populate Benchmark Table
+                const tbody = document.getElementById('metricsTableBody');
+                let tHtml = '';
+                data.models.forEach(m => {
+                    tHtml += `
+                        <tr>
+                            <td class="fw-semibold text-dark"><i class="bi bi-cpu text-primary me-2"></i>${m['Model']}</td>
+                            <td><span class="badge badge-legit-soft">${(m['Accuracy'] * 100).toFixed(2)}%</span></td>
+                            <td>${(m['Precision'] * 100).toFixed(2)}%</td>
+                            <td>${(m['Recall'] * 100).toFixed(2)}%</td>
+                            <td class="fw-semibold text-dark">${(m['F1 Score'] * 100).toFixed(2)}%</td>
+                            <td>${(m['ROC-AUC'] * 100).toFixed(2)}%</td>
+                            <td class="text-muted mono">${m['Train Time (s)']}s</td>
+                            <td><span class="badge badge-neutral-soft">Active</span></td>
+                        </tr>
+                    `;
+                });
+                tbody.innerHTML = tHtml;
+
+                // Model Comparison Chart
+                const ctx = document.getElementById('modelComparisonChart').getContext('2d');
+                const labels = data.models.map(m => m['Model']);
+                const accuracies = data.models.map(m => (m['Accuracy'] * 100).toFixed(1));
+                const precisions = data.models.map(m => (m['Precision'] * 100).toFixed(1));
+                const recalls = data.models.map(m => (m['Recall'] * 100).toFixed(1));
+                const f1s = data.models.map(m => (m['F1 Score'] * 100).toFixed(1));
+
+                if (comparisonChartInstance) comparisonChartInstance.destroy();
+                comparisonChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: 'Accuracy %', data: accuracies, backgroundColor: '#2563eb', borderRadius: 4 },
+                            { label: 'Precision %', data: precisions, backgroundColor: '#0d9488', borderRadius: 4 },
+                            { label: 'Recall %', data: recalls, backgroundColor: '#d97706', borderRadius: 4 },
+                            { label: 'F1 Score %', data: f1s, backgroundColor: '#7c3aed', borderRadius: 4 }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                min: 80,
+                                max: 100,
+                                grid: { color: '#f1f5f9' },
+                                ticks: { color: '#64748b' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#334155', font: { weight: '500' } }
+                            }
+                        },
+                        plugins: {
+                            legend: { labels: { color: '#334155', font: { family: 'Inter', size: 12 } } }
+                        }
+                    }
+                });
+
+                // Donut Chart for Class Imbalance
+                const pieCtx = document.getElementById('imbalancePieChart').getContext('2d');
+                if (pieChartInstance) pieChartInstance.destroy();
+                pieChartInstance = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Legitimate (99.83%)', 'Fraudulent (0.17%)'],
+                        datasets: [{
+                            data: [284315, 492],
+                            backgroundColor: ['#10b981', '#f43f5e'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#334155', font: { family: 'Inter' } } }
+                        }
+                    }
+                });
+
+            } catch (err) {
+                console.error("Failed to load metrics:", err);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initPcaInputs();
+            loadPresets();
+            loadMetricsAndCharts();
+            startStreaming();
+        });
+    </script>
+</body>
+</html>
